@@ -7,6 +7,7 @@
   import RecycleScroller from '../component/recycleScroller/recycleScroller.svelte';
   import type { VConsoleNetworkRequestItem } from './requestItem';
   import type { IVConsoleTabOptions } from "../lib/plugin";
+  import { getCurlCommand } from './curlirize';
 
   let reqCount = 0;
   const updateReqCount = (list: typeof $requestList) => {
@@ -36,6 +37,10 @@
     }
     return `${curl} '${req.url}'`;
   };
+  const onCopyCurl2 = (req: VConsoleNetworkRequestItem) => {
+    let curl = getCurlCommand(req);
+    return curl;
+  }
 
   onMount(() => {
     Style.use();
@@ -65,7 +70,7 @@
       stickToBottom
       scrollbar
     >
-    
+
       <svelte:fragment slot="header">
         <dl class="vc-table-row">
           <dd class="vc-table-col vc-table-col-4">Name {#if reqCount > 0}({reqCount}){/if}</dd>
@@ -74,7 +79,7 @@
           <dd class="vc-table-col">Time</dd>
         </dl>
       </svelte:fragment>
-      
+
       <div slot="empty" class="vc-plugin-empty">Empty</div>
 
       <div slot="item" let:item={req} class="vc-group" class:vc-actived="{req.actived}" id="{req.id}">
@@ -85,6 +90,14 @@
           <dd class="vc-table-col">{req.costTime}</dd>
         </dl>
         <div class="vc-group-detail">
+          <div>
+            <dl class="vc-table-row vc-left-border">
+              <dt class="vc-table-col vc-table-col-title">
+                Curl
+                <i class="vc-table-row-icon"><IconCopy handler={onCopyCurl2} content={req} /></i>
+              </dt>
+            </dl>
+          </div>
           <div>
             <dl class="vc-table-row vc-left-border">
               <dt class="vc-table-col vc-table-col-title">

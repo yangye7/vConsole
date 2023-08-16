@@ -13,6 +13,7 @@ const main = () => {
   for (const name of vendorConfig.name) {
     distContent = distContent.replace(new RegExp(`['"]${name}['"]`, 'g'), `"vendor/${name}"`);
   }
+  distContent = distContent.replace(new RegExp(`['"]vconsole['"]`, 'g'), `"@zj/vconsole"`);
   const vendorContent = '/// <reference path="../build/vendor.d.ts" />\n\n';
   fs.writeFileSync(distFile, vendorContent + distContent, 'utf8');
   console.groupEnd();
